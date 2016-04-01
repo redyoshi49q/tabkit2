@@ -2557,20 +2557,19 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         if (fixIndents)
           t.style.marginLeft = "";
       }
-      if (visible.length == 0) {
-        group.sort(tk.compareTabViewedExceptUnread);
-        tk.tabSetHidden(group[group.length - 1], false); // visibility of a tab
-      }
-      else if (visible.length > 1) {
-        visible.sort(tk.compareTabViewedExceptUnread);
-
-        //1. hide them all first
+      
+      if (visible.length != 0) {
+        //1. hide them all first (if any are hidden)
         for each (var t in visible)
           tk.tabSetHidden(t, true); // visibility of a tab
-
+      }
+      
+      if (group.length > 1) {
+        group.sort(tk.compareTabViewedExceptUnread);
+        
         //2. decide which to show: First tab in group or last viewed tab
         var firstTab = group[0];
-        var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") == "selected" ? visible.pop() : firstTab;  //which tab to show? decision here
+        var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") == "selected" ? group[group.length - 1] : firstTab;  //which tab to show? decision here
 
         //3. show it
         tk.tabSetHidden(targetTab, false); // visibility of a tab
